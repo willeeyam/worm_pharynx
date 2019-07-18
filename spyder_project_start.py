@@ -306,9 +306,28 @@ def save_array(num_frames):
         remodeled_array = frame[remodeled_roi_list()[i]]
     return remodeled_array
     
-plot_roi(30)
-
-
+def remodeled_show(end_frames):
+    """
+    This function shows the ROI frames as multiple image stills 
+    to visually show the ROI coordinates as they would appear 
+    resized and remodeled.
+    
+    Arguments
+    ----------
+    end_frames: number of frames from the first frame to show 
+    
+    Returns
+    ----------
+    Multiple individual frames using matplotlib
+    """
+    
+    video = read_video()
+    for i in range (end_frames):
+        fig, ax = plt.subplots()
+        frame = video.read()[1][:,:,1]
+        ax.imshow(frame[remodeled_roi_list()[i]])
+        plt.ginput(10000, timeout=0, show_clicks=False)
+        plt.close()
 
 
 
