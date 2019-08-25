@@ -34,7 +34,7 @@ def read_video():
     
     """
     #read the video
-    path2video = '../data/w060.avi'
+    path2video = 'w060.avi'
     # read video
     video = cv2.VideoCapture(path2video)
     return video
@@ -66,7 +66,6 @@ def tracker_pickling(fileroi, slicedfile):
     # Read first frame.
     ret, frame = cap.read()
     
-    
     # Special function allows us to draw on the very first frame our desired ROI
     roi = cv2.selectROI(frame, False)
     
@@ -84,7 +83,8 @@ def tracker_pickling(fileroi, slicedfile):
         # We need each value and we need them as integers
         (x,y,w,h) = tuple(map(int,roi))
         roi_list.append((x,y,w,h))
-        sliced_roi_list.extend(((slice(y,h)), (slice(x,w))))
+
+        sliced_roi_list.append(((slice(y,h)), (slice(x,w))))
         
         # Draw Rectangle as Tracker moves
         if ret:
@@ -106,7 +106,7 @@ def tracker_pickling(fileroi, slicedfile):
     
         # Exit if ESC pressed
         k = cv2.waitKey(1) & 0xff
-        if k == 27 : 
+        if k == 27 :
             break
             
     cap.release()
@@ -114,7 +114,7 @@ def tracker_pickling(fileroi, slicedfile):
     with open(fileroi,"wb") as al:
         pickle.dump(roi_list,al)
     with open(slicedfile,"wb") as sliced:
-        pickle.dump(roi_list,sliced)
+        pickle.dump(sliced_roi_list,sliced)
     
         
 def unpickled():   
@@ -134,7 +134,7 @@ def unpickled():
     roi_list = pickle.load(pickle_off)
     return roi_list
 
-def sliced_unpickler():
+def sliced_unpickler(file):
     """
     This function allows users to see the plotted roi coordinates plotted using
     mil_tracker. This utilzes a pickled list of slice objects to more accurately
@@ -148,7 +148,7 @@ def sliced_unpickler():
     ---------
     sliced_roi: pickled list of roi coordinates in slice form
     """
-    pickle_off = open("sliced_roi","rb")
+    pickle_off = open(file,"rb")
     roi_list = pickle.load(pickle_off)
     return roi_list
     
